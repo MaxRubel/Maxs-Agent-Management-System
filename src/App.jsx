@@ -7,9 +7,10 @@ import { getAllAgents } from "../api/Agents";
 
 function App() {
   const { fakeData, setFakeData } = useContext(FetchContext);
-  console.log(fakeData);
 
-  getAllAgents();
+  getAllAgents().then((data) => {
+    console.log(data)
+  })
 
   return (
     <>
