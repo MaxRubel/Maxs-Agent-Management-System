@@ -1,16 +1,21 @@
 import { useContext } from "react";
 import "./App.css";
 import { FetchContext } from "./context/FetchingContext";
+import { Table } from "react-bootstrap";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import { getAllAgents } from "../api/Agents";
 
 function App() {
   const { fakeData, setFakeData } = useContext(FetchContext);
   console.log(fakeData);
 
+  getAllAgents();
+
   return (
     <>
       <h1>Max's Incredible Agent Management System</h1>
       <div className="grid-container centered">
-        <table border="1" style={{ width: "100%" }}>
+        <Table striped bordered hover>
           <thead>
             <tr>
               <th>Name</th>
@@ -45,7 +50,7 @@ function App() {
               <td>Yoga, Reading</td>
             </tr>
           </tbody>
-        </table>
+        </Table>
       </div>
     </>
   );
