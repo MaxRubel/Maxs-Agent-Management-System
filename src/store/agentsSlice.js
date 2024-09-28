@@ -4,14 +4,7 @@ import { agentsApi } from "../../api/Agents";
 const agentsSlice = createSlice({
   name: "agents",
   initialState: { agents: [] },
-  reducers: {
-    removeAgent: (state, action) => {
-      state.agents = state.agents.filter(agent => agent.id !== action.payload);
-    },
-    addAgent: (state, action) => {
-      state.agents.push(action.payload);
-    },
-  },
+  reducers: {},
 
   extraReducers: (builder) => {
     builder

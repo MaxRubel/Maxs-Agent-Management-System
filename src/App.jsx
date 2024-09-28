@@ -27,7 +27,7 @@ function App() {
 
   return (
     <main>
-      <h1>Max&apos;s Incredible Agent Management System</h1>
+      <h1>Max&apos;s Amazing Agent Management System</h1>
       <div style={{ margin: "2em 0em" }}>
         <Button
           variant="outline-primary"

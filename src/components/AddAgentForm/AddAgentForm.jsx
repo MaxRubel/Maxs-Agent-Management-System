@@ -17,7 +17,7 @@ export default function AddAgentForm({
   setEditAgent
 }) {
   const [formValue, setFormValue] = useState(initialState)
-  const [addAgent, { isLoading, isError, error, isSuccess }] = useAddAgentMutation()
+  const [addAgent] = useAddAgentMutation()
   const [updateAgent] = useUpdateAgentMutation();
   const [deleteAgent] = useDeleteAgentMutation()
 
