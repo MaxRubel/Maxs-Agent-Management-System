@@ -1,76 +1,59 @@
 /* eslint-disable react/prop-types */
+import { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
-import "./AddAgentForm.css"
-import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addAgent, removeAgent, updateAgent } from "../../store/agentsSlice";
+import "./AddAgentForm.css";
 
 const initialState = {
   fullName: "",
   email: "",
   department: "",
   interests: "",
-}
+};
 
-export default function AddAgentForm({
-  open,
-  setIsOpen,
-  agentObj,
-  setEditAgent
-}) {
+export default function AddAgentForm({ open, setIsOpen, agentObj, setEditAgent }) {
   const [formValue, setFormValue] = useState(initialState);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (open && agentObj) {
       setFormValue(agentObj);
     }
-  }, [open, agentObj])
+  }, [open, agentObj]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setFormValue((preVal) => ({
-      ...preVal, [name]: value
+    setFormValue((prevVal) => ({
+      ...prevVal,
+      [name]: value,
     }));
-  }
+  };
 
   const closeForm = () => {
     setIsOpen(false);
     setFormValue(initialState);
     setTimeout(() => {
-      setEditAgent(null)
+      setEditAgent(null);
     }, 800);
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!agentObj) {
-      dispatch(addAgent({ ...formValue, id: Date.now() }))
-      closeForm();
+      dispatch(addAgent({ ...formValue, id: Date.now() }));
     } else {
-      try {
-        console.log("updating")
-        dispatch(updateAgent({ ...formValue, id: agentObj.id }))
-        closeForm();
-      } catch (err) {
-        console.error("something went wrong: ", err)
-      }
+      dispatch(updateAgent({ ...formValue, id: agentObj.id }));
     }
-  }
+    closeForm();
+  };
 
   const handleDelete = async () => {
-    try {
-      if (window.confirm("Are you sure you want to delete this agent?")) {
-        dispatch(removeAgent({ id: agentObj.id }))
-      }
-      closeForm()
-    } catch (err) {
-      console.error("somewthing went wrong: ", err)
+    if (window.confirm("Are you sure you want to delete this agent?")) {
+      dispatch(removeAgent({ id: agentObj.id }));
     }
-
-  }
+    closeForm();
+  };
 
   return (
     <Form
@@ -81,7 +64,7 @@ export default function AddAgentForm({
       <h2 style={{ marginBottom: "2em" }}>
         {agentObj ? "Update Agent" : "Add A New Agent"}
       </h2>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
+      <Form.Group className="mb-3" controlId="formFullName">
         <Form.Label className="text-left">Full Name</Form.Label>
         <Form.Control
           type="text"
@@ -92,7 +75,7 @@ export default function AddAgentForm({
           required
         />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
+      <Form.Group className="mb-3" controlId="formEmail">
         <Form.Label className="text-left">Email address</Form.Label>
         <Form.Control
           type="email"
@@ -103,7 +86,7 @@ export default function AddAgentForm({
           required
         />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
+      <Form.Group className="mb-3" controlId="formDepartment">
         <Form.Label className="text-left">Department</Form.Label>
         <Form.Control
           type="text"
@@ -114,7 +97,7 @@ export default function AddAgentForm({
           required
         />
       </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
+      <Form.Group className="mb-3" controlId="formInterests">
         <Form.Label className="text-left">Interests</Form.Label>
         <Form.Control
           type="text"
@@ -129,25 +112,18 @@ export default function AddAgentForm({
           <Button variant="outline-primary" type="submit">
             Submit
           </Button>
-          <Button
-            variant="outline-danger"
-            type="button"
-            onClick={closeForm}
-          >
+          <Button variant="outline-danger" type="button" onClick={closeForm}>
             Cancel
           </Button>
         </div>
         <div className="col2">
-          {agentObj && (<Button
-            variant="danger"
-            type="button"
-            onClick={handleDelete}
-          >
-            Delete Agent
-          </Button>)}
-
+          {agentObj && (
+            <Button variant="danger" type="button" onClick={handleDelete}>
+              Delete Agent
+            </Button>
+          )}
         </div>
       </div>
     </Form>
-  )
+  );
 }
