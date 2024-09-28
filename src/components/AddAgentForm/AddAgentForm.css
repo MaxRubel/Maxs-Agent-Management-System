@@ -1,0 +1,38 @@
+.sliding-form {
+  height: 100vh;
+  width: 100vw;
+  padding: 25%;
+  position: absolute;
+  top: 0;
+  background-color: white;
+  transition: all .7s ease;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.button-gap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 1.5em;
+}
+
+.col1 {
+  display: flex;
+  gap: 1em;
+}
+
+.col2 {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.text-left {
+  text-align: left !important;
+  width: 100%;
+}
+
+.last-row {
+  display: grid;
+}

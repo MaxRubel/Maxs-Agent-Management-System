@@ -1,21 +1,23 @@
 import "./App.css";
-import { Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import { getAllAgents } from "../api/Agents";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useGetAllAgentsQuery } from "../api/Agents";
+import AddAgentForm from "./components/AddAgentForm/AddAgentForm";
+import { useState } from "react";
 
 function App() {
-  const dispatch = useDispatch()
-  const { agents, loading, error } = useSelector((state => state.agents))
+  const [openForm, setOpenForm] = useState(false)
+  const [editAgent, setEditAgent] = useState(null)
 
-  useEffect(() => {
-    dispatch(getAllAgents())
-  }, [])
+  const { data: agents, error, isLoading } = useGetAllAgentsQuery();
 
-  console.log(agents)
+  const updateAgentForm = (id) => {
+    const agentObj = agents.find((item) => item.id === id)
+    setEditAgent(agentObj)
+    setOpenForm(true)
+  }
 
-  if (loading) {
+  if (isLoading) {
     return <div>Loading...</div>
   }
 
@@ -24,9 +26,22 @@ function App() {
   }
 
   return (
-    <>
+    <main>
       <h1>Max&apos;s Incredible Agent Management System</h1>
+      <div style={{ margin: "2em 0em" }}>
+        <Button
+          variant="outline-primary"
+          onClick={() => { setOpenForm(true) }} >
+          Add an Agent
+        </Button>
+      </div>
       <div className="grid-container centered">
+        <AddAgentForm
+          open={openForm}
+          setIsOpen={setOpenForm}
+          setEditAgent={setEditAgent}
+          agentObj={editAgent}
+        />
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -37,34 +52,22 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>John Doe</td>
-              <td>john.doe@example.com</td>
-              <td>Marketing</td>
-              <td>Photography, Hiking</td>
-            </tr>
-            <tr>
-              <td>Jane Smith</td>
-              <td>jane.smith@example.com</td>
-              <td>Engineering</td>
-              <td>Coding, Chess</td>
-            </tr>
-            <tr>
-              <td>Mike Johnson</td>
-              <td>mike.johnson@example.com</td>
-              <td>Sales</td>
-              <td>Golf, Cooking</td>
-            </tr>
-            <tr>
-              <td>Emily Brown</td>
-              <td>emily.brown@example.com</td>
-              <td>Human Resources</td>
-              <td>Yoga, Reading</td>
-            </tr>
+            {agents.map((agent) => (
+              <tr key={agent.id}>
+                <td
+                  style={{ cursor: "pointer" }}
+                  onClick={() => { updateAgentForm(agent.id) }}>
+                  {agent.fullName}
+                </td>
+                <td><a href={`mailto:${agent.email}`}>{agent.email}</a></td>
+                <td>{agent.department}</td>
+                <td>{agent.interests}</td>
+              </tr>
+            ))}
           </tbody>
         </Table>
       </div>
-    </>
+    </main>
   );
 }
 
