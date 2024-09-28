@@ -26,7 +26,7 @@ export default function AddAgentForm({
     if (open && agentObj) {
       setFormValue(agentObj);
     }
-  }, [open])
+  }, [open, agentObj])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
