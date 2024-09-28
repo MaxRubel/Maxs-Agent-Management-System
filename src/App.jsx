@@ -1,20 +1,31 @@
-import { useContext } from "react";
 import "./App.css";
-import { FetchContext } from "./context/FetchingContext";
 import { Table } from "react-bootstrap";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import { getAllAgents } from "../api/Agents";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 function App() {
-  const { fakeData, setFakeData } = useContext(FetchContext);
+  const dispatch = useDispatch()
+  const { agents, loading, error } = useSelector((state => state.agents))
 
-  getAllAgents().then((data) => {
-    console.log(data)
-  })
+  useEffect(() => {
+    dispatch(getAllAgents())
+  }, [])
+
+  console.log(agents)
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div>Something went wrong...</div>
+  }
 
   return (
     <>
-      <h1>Max's Incredible Agent Management System</h1>
+      <h1>Max&apos;s Incredible Agent Management System</h1>
       <div className="grid-container centered">
         <Table striped bordered hover>
           <thead>
