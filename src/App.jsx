@@ -11,21 +11,11 @@ function App() {
 
   const { agents } = useSelector((state) => state.agents);
 
-  // const { data: agents, error, isLoading } = useGetAllAgentsQuery();
-
   const updateAgentForm = (id) => {
     const agentObj = agents.find((item) => item.id === id)
     setEditAgent(agentObj)
     setOpenForm(true)
   }
-
-  // if (isLoading) {
-  //   return <div>Loading...</div>
-  // }
-
-  // if (error) {
-  //   return <div>Something went wrong...</div>
-  // }
 
   return (
     <main>
