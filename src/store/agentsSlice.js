@@ -1,36 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { agentsApi } from "../../api/Agents";
+import { sampleAgents } from "../../sampleData/sampleAgents";
 
 const agentsSlice = createSlice({
   name: "agents",
-  initialState: { agents: [] },
-  reducers: {},
+  initialState: { agents: sampleAgents },
+  reducers: {
+    addAgent: (state, action) => {
+      state.agents.push(action.payload)
+    },
+    updateAgent: (state, action) => {
+      const updateIndex = state.agents.findIndex(item => item.id === action.payload.id)
+      state.agents[updateIndex] = action.payload
+    },
+    removeAgent: (state, action) => {
+      state.agents = state.agents.filter((agent) => agent.id !== action.payload.id);
+    }
+  },
 
-  extraReducers: (builder) => {
-    builder
-      .addMatcher(
-        agentsApi.endpoints.getAllAgents.matchPending,
-        (state) => {
-          state.status = 'loading';
-        }
-      )
-      .addMatcher(
-        agentsApi.endpoints.getAllAgents.matchFulfilled,
-        (state, action) => {
-          state.status = 'succeeded';
-          state.agents = action.payload;
-        }
-      )
-      .addMatcher(
-        agentsApi.endpoints.getAllAgents.matchRejected,
-        (state, action) => {
-          state.status = 'failed';
-          state.error = action.error.message;
-        }
-      );
-  }
 });
 
-export const { removeAgent, addAgent } = agentsSlice.actions;
+export const { removeAgent, addAgent, updateAgent } = agentsSlice.actions;
 
 export default agentsSlice.reducer;

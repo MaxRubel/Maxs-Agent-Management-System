@@ -1,7 +1,8 @@
 import { Button, Form } from "react-bootstrap";
 import "./AddAgentForm.css"
 import { useEffect, useState } from "react";
-import { useAddAgentMutation, useUpdateAgentMutation, useDeleteAgentMutation } from "../../../api/Agents";
+import { useDispatch, useSelector } from "react-redux";
+import { addAgent, removeAgent, updateAgent } from "../../store/agentsSlice";
 
 const initialState = {
   fullName: "",
@@ -16,46 +17,43 @@ export default function AddAgentForm({
   agentObj,
   setEditAgent
 }) {
-  const [formValue, setFormValue] = useState(initialState)
-  const [addAgent] = useAddAgentMutation()
-  const [updateAgent] = useUpdateAgentMutation();
-  const [deleteAgent] = useDeleteAgentMutation()
+  const [formValue, setFormValue] = useState(initialState);
+
+  const dispatch = useDispatch();
+  const { agents } = useSelector((state) => state.agents);
 
   useEffect(() => {
     if (open && agentObj) {
-      setFormValue(agentObj)
+      setFormValue(agentObj);
     }
   }, [open])
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
 
     setFormValue((preVal) => ({
       ...preVal, [name]: value
-    }))
+    }));
   }
 
   const closeForm = () => {
-    setIsOpen(false)
-    setFormValue(initialState)
+    setIsOpen(false);
+    setFormValue(initialState);
     setTimeout(() => {
       setEditAgent(null)
-    }, 800)
+    }, 800);
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!agentObj) {
-      try {
-        await addAgent(formValue).unwrap()
-        closeForm()
-      } catch (err) {
-        console.error("something went wrong: ", err)
-      }
+      dispatch(addAgent({ ...formValue, id: Date.now() }))
+      closeForm();
     } else {
       try {
-        await updateAgent({ id: agentObj.id, formValue }).unwrap();
-        closeForm()
+        console.log("updating")
+        dispatch(updateAgent({ ...formValue, id: agentObj.id }))
+        closeForm();
       } catch (err) {
         console.error("something went wrong: ", err)
       }
@@ -65,7 +63,7 @@ export default function AddAgentForm({
   const handleDelete = async () => {
     try {
       if (window.confirm("Are you sure you want to delete this agent?")) {
-        await deleteAgent(agentObj.id)
+        dispatch(removeAgent({ id: agentObj.id }))
       }
       closeForm()
     } catch (err) {

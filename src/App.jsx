@@ -1,15 +1,17 @@
 import "./App.css";
 import { Button, Table } from "react-bootstrap";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import { useGetAllAgentsQuery } from "../api/Agents";
 import AddAgentForm from "./components/AddAgentForm/AddAgentForm";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 function App() {
   const [openForm, setOpenForm] = useState(false)
   const [editAgent, setEditAgent] = useState(null)
 
-  const { data: agents, error, isLoading } = useGetAllAgentsQuery();
+  const { agents } = useSelector((state) => state.agents);
+
+  // const { data: agents, error, isLoading } = useGetAllAgentsQuery();
 
   const updateAgentForm = (id) => {
     const agentObj = agents.find((item) => item.id === id)
@@ -17,13 +19,13 @@ function App() {
     setOpenForm(true)
   }
 
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>
+  // }
 
-  if (error) {
-    return <div>Something went wrong...</div>
-  }
+  // if (error) {
+  //   return <div>Something went wrong...</div>
+  // }
 
   return (
     <main>
@@ -56,7 +58,8 @@ function App() {
               <tr key={agent.id}>
                 <td
                   style={{ cursor: "pointer" }}
-                  onClick={() => { updateAgentForm(agent.id) }}>
+                  onClick={() => { updateAgentForm(agent.id) }}
+                >
                   {agent.fullName}
                 </td>
                 <td><a href={`mailto:${agent.email}`}>{agent.email}</a></td>
