@@ -16,7 +16,6 @@ const agentsSlice = createSlice({
       state.agents = state.agents.filter((agent) => agent.id !== action.payload.id);
     }
   },
-
 });
 
 export const { removeAgent, addAgent, updateAgent } = agentsSlice.actions;

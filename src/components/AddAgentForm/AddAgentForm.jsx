@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 import { Button, Form } from "react-bootstrap";
 import "./AddAgentForm.css"
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addAgent, removeAgent, updateAgent } from "../../store/agentsSlice";
 
 const initialState = {
@@ -20,7 +21,6 @@ export default function AddAgentForm({
   const [formValue, setFormValue] = useState(initialState);
 
   const dispatch = useDispatch();
-  const { agents } = useSelector((state) => state.agents);
 
   useEffect(() => {
     if (open && agentObj) {

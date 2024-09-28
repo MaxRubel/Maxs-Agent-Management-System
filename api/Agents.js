@@ -1,6 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+// import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const endpoint = import.meta.env.VITE_HTTP_SERVER;
+// const endpoint = import.meta.env.VITE_HTTP_SERVER;
 
 // export const agentsApi = createApi({
 //   reducerPath: 'agentsApi',
