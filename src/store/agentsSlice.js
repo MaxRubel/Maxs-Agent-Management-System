@@ -18,6 +18,7 @@ const agentsSlice = createSlice({
       state.agents.push(action.payload);
     },
   },
+  
   extraReducers: (builder) => {
     builder.addCase(getAllAgents.pending, (state) => {
       state.loading = true
