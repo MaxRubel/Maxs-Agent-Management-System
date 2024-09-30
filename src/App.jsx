@@ -12,7 +12,7 @@ function App() {
   const { data: agents, error, isLoading } = useGetAllAgentsQuery();
 
   const updateAgentForm = (id) => {
-    const agentObj = agents.find((item) => item.id === id);
+    const agentObj = agents.find((item) => item._id === id);
     setEditAgent(agentObj);
     setOpenForm(true);
   };
@@ -56,11 +56,11 @@ function App() {
           </thead>
           <tbody>
             {agents.map((agent) => (
-              <tr key={agent.id}>
+              <tr key={agent._id}>
                 <td
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    updateAgentForm(agent.id);
+                    updateAgentForm(agent._id);
                   }}
                 >
                   {agent.fullName}

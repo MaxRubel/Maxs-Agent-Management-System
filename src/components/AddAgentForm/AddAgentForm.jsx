@@ -1,78 +1,83 @@
+/* eslint-disable react/prop-types */
 import { Button, Form } from "react-bootstrap";
-import "./AddAgentForm.css"
+import "./AddAgentForm.css";
 import { useEffect, useState } from "react";
-import { useAddAgentMutation, useUpdateAgentMutation, useDeleteAgentMutation } from "../../../api/Agents";
+import {
+  useAddAgentMutation,
+  useUpdateAgentMutation,
+  useDeleteAgentMutation,
+} from "../../../api/Agents";
 
 const initialState = {
   fullName: "",
   email: "",
   department: "",
   interests: "",
-}
+};
 
 export default function AddAgentForm({
   open,
   setIsOpen,
   agentObj,
-  setEditAgent
+  setEditAgent,
 }) {
-  const [formValue, setFormValue] = useState(initialState)
-  const [addAgent] = useAddAgentMutation()
+  const [formValue, setFormValue] = useState(initialState);
+  const [addAgent] = useAddAgentMutation();
   const [updateAgent] = useUpdateAgentMutation();
-  const [deleteAgent] = useDeleteAgentMutation()
+  const [deleteAgent] = useDeleteAgentMutation();
 
   useEffect(() => {
     if (open && agentObj) {
-      setFormValue(agentObj)
+      setFormValue(agentObj);
     }
-  }, [open])
+  }, [open]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
 
     setFormValue((preVal) => ({
-      ...preVal, [name]: value
-    }))
-  }
+      ...preVal,
+      [name]: value,
+    }));
+  };
 
   const closeForm = () => {
-    setIsOpen(false)
-    setFormValue(initialState)
+    setIsOpen(false);
+    setFormValue(initialState);
     setTimeout(() => {
-      setEditAgent(null)
-    }, 800)
-  }
+      setEditAgent(null);
+    }, 800);
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!agentObj) {
       try {
-        await addAgent(formValue).unwrap()
-        closeForm()
+        await addAgent(formValue).unwrap();
+        closeForm();
       } catch (err) {
-        console.error("something went wrong: ", err)
+        console.error("something went wrong: ", err);
       }
     } else {
       try {
-        await updateAgent({ id: agentObj.id, formValue }).unwrap();
-        closeForm()
+        await updateAgent({ id: agentObj._id, formValue }).unwrap();
+        closeForm();
       } catch (err) {
-        console.error("something went wrong: ", err)
+        console.error("something went wrong: ", err);
       }
     }
-  }
+  };
 
   const handleDelete = async () => {
     try {
       if (window.confirm("Are you sure you want to delete this agent?")) {
-        await deleteAgent(agentObj.id)
+        await deleteAgent(agentObj._id);
       }
-      closeForm()
+      closeForm();
     } catch (err) {
-      console.error("somewthing went wrong: ", err)
+      console.error("somewthing went wrong: ", err);
     }
-
-  }
+  };
 
   return (
     <Form
@@ -131,25 +136,18 @@ export default function AddAgentForm({
           <Button variant="outline-primary" type="submit">
             Submit
           </Button>
-          <Button
-            variant="outline-danger"
-            type="button"
-            onClick={closeForm}
-          >
+          <Button variant="outline-danger" type="button" onClick={closeForm}>
             Cancel
           </Button>
         </div>
         <div className="col2">
-          {agentObj && (<Button
-            variant="danger"
-            type="button"
-            onClick={handleDelete}
-          >
-            Delete Agent
-          </Button>)}
-
+          {agentObj && (
+            <Button variant="danger" type="button" onClick={handleDelete}>
+              Delete Agent
+            </Button>
+          )}
         </div>
       </div>
     </Form>
-  )
+  );
 }
