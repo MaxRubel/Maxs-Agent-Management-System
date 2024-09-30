@@ -2,20 +2,37 @@ import "./App.css";
 import { Button, Table } from "react-bootstrap";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import AddAgentForm from "./components/AddAgentForm/AddAgentForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 function App() {
-  const [openForm, setOpenForm] = useState(false)
-  const [editAgent, setEditAgent] = useState(null)
+  const [openForm, setOpenForm] = useState(false);
+  const [editAgent, setEditAgent] = useState(null);
+  const [departments, setDepartments] = useState({});
 
   const { agents } = useSelector((state) => state.agents);
 
   const updateAgentForm = (id) => {
-    const agentObj = agents.find((item) => item.id === id)
-    setEditAgent(agentObj)
-    setOpenForm(true)
-  }
+    const agentObj = agents.find((item) => item.id === id);
+    setEditAgent(agentObj);
+    setOpenForm(true);
+  };
+
+  useEffect(() => {
+    const newDepartments = {};
+    for (let i = 0; i < agents.length; i++) {
+      const agent = agents[i];
+      const department = agent.department;
+
+      if (newDepartments[department]) {
+        newDepartments[department].push(agent);
+      } else {
+        newDepartments[department] = [agent];
+      }
+    }
+
+    setDepartments(newDepartments);
+  }, [agents]);
 
   return (
     <main>
@@ -23,7 +40,10 @@ function App() {
       <div style={{ margin: "2em 0em" }}>
         <Button
           variant="outline-primary"
-          onClick={() => { setOpenForm(true) }} >
+          onClick={() => {
+            setOpenForm(true);
+          }}
+        >
           Add an Agent
         </Button>
       </div>
@@ -48,11 +68,15 @@ function App() {
               <tr key={agent.id}>
                 <td
                   style={{ cursor: "pointer" }}
-                  onClick={() => { updateAgentForm(agent.id) }}
+                  onClick={() => {
+                    updateAgentForm(agent.id);
+                  }}
                 >
                   {agent.fullName}
                 </td>
-                <td><a href={`mailto:${agent.email}`}>{agent.email}</a></td>
+                <td>
+                  <a href={`mailto:${agent.email}`}>{agent.email}</a>
+                </td>
                 <td>{agent.department}</td>
                 <td>{agent.interests}</td>
               </tr>
