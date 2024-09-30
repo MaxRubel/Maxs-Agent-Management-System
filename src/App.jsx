@@ -6,6 +6,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import { getAllAgents } from "../api/Agents";
 
 function App() {
+  // eslint-disable-next-line no-unused-vars
   const { fakeData, setFakeData } = useContext(FetchContext);
   console.log(fakeData);
 
@@ -13,7 +14,7 @@ function App() {
 
   return (
     <>
-      <h1>Max's Incredible Agent Management System</h1>
+      <h1>Agents</h1>
       <div className="grid-container centered">
         <Table striped bordered hover>
           <thead>
