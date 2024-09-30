@@ -2,12 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
-import { FetchContextProvider } from "./context/FetchingContext.jsx";
+import { Provider } from "react-redux";
+import { fetchingStore } from "./store/FetchingStore.js";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <FetchContextProvider>
+    <Provider store={fetchingStore}>
       <App />
-    </FetchContextProvider>
+    </Provider>
   </React.StrictMode>
 );
